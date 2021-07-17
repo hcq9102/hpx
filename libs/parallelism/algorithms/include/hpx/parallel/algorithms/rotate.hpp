@@ -419,7 +419,7 @@ namespace hpx {
                 "Requires at least forward iterator.");
                 
             hpx::parallel::v1::detail::rotate<FwdIter>().call2(
-                hpx::execution::seq, first, new_first, last);
+                hpx::execution::sequenced_policy{}, first, new_first, last);
               
         }
         // clang-format off
@@ -441,9 +441,10 @@ namespace hpx {
                     !hpx::traits::is_bidirectional_iterator<FwdIter>::value>
                 is_seq;
 
-            return parallel::util::detail::algorithm_result<ExPolicy>::get(
-                hpx::parallel::v1::detail::rotate<FwdIter>().call2(
-                std::forward<ExPolicy>(policy), is_seq(), first, new_first, last));
+            return parallel::util::get_second_element(
+                hpx::parallel::v1::detail::rotate<util::in_out_result<FwdIter,FwdIter>>()
+                .call2(std::forward<ExPolicy>(policy), is_seq(), first, new_first, last));
+
         } 
         
     } rotate{};
@@ -472,7 +473,7 @@ namespace hpx {
 
             return parallel::util::get_second_element(parallel::v1::detail::rotate_copy<
                 hpx::parallel::util::in_out_result<FwdIter, OutIter>>()
-                .call2(hpx::execution::sequenced_policy{}, std::true_type{}, first, new_first,
+                .call2(hpx::execution::sequenced_policy{}, std::true_type{},first, new_first,
                    last, dest_first));
              
             //return detail::rotate_copy<util::in_out_result<FwdIter, OutIter>>()
@@ -499,13 +500,13 @@ namespace hpx {
             static_assert((hpx::traits::is_forward_iterator<FwdIter2>::value),
                 "Requires at least forward iterator.");
 
-            // typedef std::integral_constant<bool,
-            //     hpx::is_sequenced_execution_policy<ExPolicy>::value ||
-            //         !hpx::traits::is_forward_iterator<FwdIter1>::value ||
-            //         !hpx::traits::is_forward_iterator<FwdIter2>::value>
-            //     is_seq;
+            typedef std::integral_constant<bool,
+                hpx::is_sequenced_execution_policy<ExPolicy>::value ||
+                    !hpx::traits::is_forward_iterator<FwdIter1>::value 
+                    >
+                is_seq;
 
-            typedef hpx::is_sequenced_execution_policy<ExPolicy> is_seq;
+            // typedef hpx::is_sequenced_execution_policy<ExPolicy> is_seq;
 
             return parallel::util::get_second_element(parallel::v1::detail::rotate_copy<
                 hpx::parallel::util::in_out_result<FwdIter1, FwdIter2>>()
