@@ -1,7 +1,7 @@
 //  Copyright (c) 2007-2017 Hartmut Kaiser
 //
 //  SPDX-License-Identifier: BSL-1.0
-//  Distributed under the Boost Software License, Version 1.0. (See accompanyinggit
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 /// \file parallel/algorithms/rotate.hpp
@@ -472,7 +472,7 @@ namespace hpx {
                 "Requires at least output iterator.");
 
             typedef hpx::is_sequenced_execution_policy<ExPolicy> is_seq;
-            
+
             return parallel::util::get_second_element(parallel::v1::detail::rotate_copy<
                 hpx::parallel::util::in_out_result<FwdIter, OutIter>>()
                 .call2(std::forward<ExPolicy>(policy), is_seq(),first, 
