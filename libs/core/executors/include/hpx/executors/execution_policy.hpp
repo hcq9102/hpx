@@ -1325,6 +1325,14 @@ namespace hpx { namespace execution {
         {
             return *this;
         }
+        /// Create a new task policy from itself
+        ///
+        /// \returns The task parallel unsequenced policy
+        ///
+        constexpr decltype(auto) operator()(task_policy_tag /*tag*/) const
+        {
+            return *this;
+        }
 
     public:
         /// Return the associated executor object.
@@ -1397,6 +1405,15 @@ namespace hpx { namespace execution {
         {
             return *this;
         }
+        
+        /// Create a new task policy from itself
+        ///
+        /// \returns The task unsequenced policy
+        ///
+        constexpr decltype(auto) operator()(task_policy_tag /*tag*/) const
+        {
+            return *this;
+        }
 
     public:
         /// Return the associated executor object.
@@ -1443,9 +1460,21 @@ namespace hpx { namespace execution {
     {
         return seq.on(executor()).with(parameters());
     }
+    
+    constexpr decltype(auto) sequenced_task_policy::operator()(
+        task_policy_tag /*tag*/) const
+    {
+        return seq.on(executor()).with(parameters());
+    }
 
     constexpr decltype(auto) parallel_task_policy::operator()(
         non_task_policy_tag /*tag*/) const
+    {
+        return par.on(executor()).with(parameters());
+    }
+    
+    constexpr decltype(auto) parallel_task_policy::operator()(
+        task_policy_tag /*tag*/) const
     {
         return par.on(executor()).with(parameters());
     }
@@ -1459,11 +1488,31 @@ namespace hpx { namespace execution {
             .on(executor())
             .with(parameters());
     }
+    
+    template <typename Executor, typename Parameters>
+    constexpr decltype(auto)
+        sequenced_task_policy_shim<Executor, Parameters>::operator()(
+            task_policy_tag /*tag*/) const
+    {
+        return sequenced_policy_shim<Executor, Parameters>{}
+            .on(executor())
+            .with(parameters());
+    }
 
     template <typename Executor, typename Parameters>
     constexpr decltype(auto)
         parallel_task_policy_shim<Executor, Parameters>::operator()(
             non_task_policy_tag /*tag*/) const
+    {
+        return parallel_policy_shim<Executor, Parameters>{}
+            .on(executor())
+            .with(parameters());
+    }
+    
+    template <typename Executor, typename Parameters>
+    constexpr decltype(auto)
+        parallel_task_policy_shim<Executor, Parameters>::operator()(
+            task_policy_tag /*tag*/) const
     {
         return parallel_policy_shim<Executor, Parameters>{}
             .on(executor())
