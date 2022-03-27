@@ -1317,6 +1317,11 @@ namespace hpx { namespace execution {
         constexpr parallel_unsequenced_policy() = default;
         /// \endcond
 
+        constexpr parallel_unsequenced_policy operator()(task_policy_tag /*tag*/) const
+        {
+            return parallel_unsequenced_policy();
+        }
+
         /// Create a new non task policy from itself
         ///
         /// \returns The non task parallel unsequenced policy
@@ -1324,6 +1329,42 @@ namespace hpx { namespace execution {
         constexpr decltype(auto) operator()(non_task_policy_tag /*tag*/) const
         {
             return *this;
+        }
+
+        template <typename Executor>
+        constexpr decltype(auto) on(Executor&& exec) const
+        {
+            using executor_type = std::decay_t<Executor>;
+
+            static_assert(hpx::traits::is_executor_any<executor_type>::value,
+                "hpx::traits::is_executor_any<Executor>::value");
+
+            return hpx::parallel::execution::create_rebound_policy(
+                *this, HPX_FORWARD(Executor, exec), parameters());
+        }
+
+        /// Create a new parallel_policy_shim from the given
+        /// execution parameters
+        ///
+        /// \tparam Parameters  The type of the executor parameters to
+        ///                     associate with this execution policy.
+        ///
+        /// \param params       [in] The executor parameters to use for the
+        ///                     execution of the parallel algorithm the
+        ///                     returned execution policy is used with.
+        ///
+        /// \note Requires: all parameters are executor_parameters,
+        ///                 different parameter types can't be duplicated
+        ///
+        /// \returns The new parallel_policy_shim
+        ///
+        template <typename... Parameters>
+        constexpr decltype(auto) with(Parameters&&... params) const
+        {
+            return hpx::parallel::execution::create_rebound_policy(*this,
+                executor(),
+                parallel::execution::join_executor_parameters(
+                    HPX_FORWARD(Parameters, params)...));
         }
 
     public:
@@ -1389,6 +1430,16 @@ namespace hpx { namespace execution {
         constexpr unsequenced_policy() = default;
         /// \endcond
 
+        /// Create a new task policy from itself
+        ///
+        /// \returns The new unsequenced policy
+        ///
+        
+        constexpr unsequenced_policy operator()(task_policy_tag /*tag*/) const
+        {
+            return unsequenced_policy();
+        }
+
         /// Create a new non task policy from itself
         ///
         /// \returns The non task unsequenced policy
@@ -1396,6 +1447,42 @@ namespace hpx { namespace execution {
         constexpr decltype(auto) operator()(non_task_policy_tag /*tag*/) const
         {
             return *this;
+        }
+
+        template <typename Executor>
+        constexpr decltype(auto) on(Executor&& exec) const
+        {
+            using executor_type = std::decay_t<Executor>;
+
+            static_assert(hpx::traits::is_executor_any<executor_type>::value,
+                "hpx::traits::is_executor_any<Executor>::value");
+
+            return hpx::parallel::execution::create_rebound_policy(
+                *this, HPX_FORWARD(Executor, exec), parameters());
+        }
+
+        /// Create a new parallel_policy_shim from the given
+        /// execution parameters
+        ///
+        /// \tparam Parameters  The type of the executor parameters to
+        ///                     associate with this execution policy.
+        ///
+        /// \param params       [in] The executor parameters to use for the
+        ///                     execution of the parallel algorithm the
+        ///                     returned execution policy is used with.
+        ///
+        /// \note Requires: all parameters are executor_parameters,
+        ///                 different parameter types can't be duplicated
+        ///
+        /// \returns The new parallel_policy_shim
+        ///
+        template <typename... Parameters>
+        constexpr decltype(auto) with(Parameters&&... params) const
+        {
+            return hpx::parallel::execution::create_rebound_policy(*this,
+                executor(),
+                parallel::execution::join_executor_parameters(
+                    HPX_FORWARD(Parameters, params)...));
         }
 
     public:
