@@ -45,6 +45,16 @@ namespace hpx { namespace execution {
     {
     };
 
+    /// Function invocations executed by a group of parallel/vector execution 
+    /// agents are permitted to execute in unordered fashion when executed in 
+    /// different threads, and un-sequenced with respect to one another when 
+    /// executed in the same thread.
+    /// \note \a parallel_unsequenced_execution_tag is weaker than
+    ///       \a unsequenced_execution_tag.
+    struct parallel_unsequenced_execution_tag
+    {
+    };
+
     /// \cond NOINTERNAL
     struct task_policy_tag
     {
