@@ -398,6 +398,7 @@ namespace hpx { namespace execution {
     };
 
     using parallel_executor = parallel_policy_executor<hpx::launch>;
+    using parallel_unsequenced_executor = parallel_policy_executor<hpx::launch>;
 }}    // namespace hpx::execution
 
 namespace hpx { namespace parallel { namespace execution {
