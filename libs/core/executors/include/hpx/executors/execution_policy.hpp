@@ -1997,6 +1997,34 @@ namespace hpx { namespace detail {
       : std::true_type
     {
     };
+    
+    template <typename Executor, typename Parameters>
+    struct is_rebound_execution_policy<
+        hpx::execution::unsequenced_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
+    template <typename Executor, typename Parameters>
+    struct is_rebound_execution_policy<
+        hpx::execution::unsequenced_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
+    template <typename Executor, typename Parameters>
+    struct is_rebound_execution_policy<
+        hpx::execution::parallel_unsequenced_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+
+    template <typename Executor, typename Parameters>
+    struct is_rebound_execution_policy<
+        hpx::execution::parallel_unsequenced_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
 
     ///////////////////////////////////////////////////////////////////////////
     /// \cond NOINTERNAL
@@ -2017,9 +2045,23 @@ namespace hpx { namespace detail {
       : std::true_type
     {
     };
+    
+    template <typename Executor, typename Parameters>
+    struct is_execution_policy<
+        hpx::execution::parallel_unsequenced_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
 
     template <>
     struct is_execution_policy<hpx::execution::unsequenced_policy>
+      : std::true_type
+    {
+    };
+    
+    template <typename Executor, typename Parameters>
+    struct is_execution_policy<
+        hpx::execution::unsequenced_policy_shim<Executor, Parameters>>
       : std::true_type
     {
     };
@@ -2063,6 +2105,33 @@ namespace hpx { namespace detail {
       : std::true_type
     {
     };
+    
+    template <>
+    struct is_execution_policy<hpx::execution::unsequenced_task_policy>
+      : std::true_type
+    {
+    };
+
+    template <typename Executor, typename Parameters>
+    struct is_execution_policy<
+        hpx::execution::unsequenced_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
+    template <>
+    struct is_execution_policy<hpx::execution::parallel_unsequenced_task_policy>
+      : std::true_type
+    {
+    };
+
+    template <typename Executor, typename Parameters>
+    struct is_execution_policy<
+        hpx::execution::parallel_unsequenced_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
     /// \endcond
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2085,6 +2154,13 @@ namespace hpx { namespace detail {
         hpx::execution::parallel_unsequenced_policy> : std::true_type
     {
     };
+    
+    template <typename Executor, typename Parameters>
+    struct is_parallel_execution_policy<
+        hpx::execution::parallel_unsequenced_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
 
     template <>
     struct is_parallel_execution_policy<hpx::execution::parallel_task_policy>
@@ -2098,6 +2174,8 @@ namespace hpx { namespace detail {
       : std::true_type
     {
     };
+    
+    
     /// \endcond
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2133,6 +2211,26 @@ namespace hpx { namespace detail {
       : std::true_type
     {
     };
+    
+    template <typename Executor, typename Parameters>
+    struct is_sequenced_execution_policy<
+        hpx::execution::unsequenced_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
+    template <>
+    struct is_sequenced_execution_policy<hpx::execution::unsequenced_task_policy>
+      : std::true_type
+    {
+    };
+    
+    template <typename Executor, typename Parameters>
+    struct is_sequenced_execution_policy<
+        hpx::execution::unsequenced_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
     /// \endcond
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2159,6 +2257,32 @@ namespace hpx { namespace detail {
     template <typename Executor, typename Parameters>
     struct is_async_execution_policy<
         hpx::execution::parallel_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
+    template <>
+    struct is_async_execution_policy<hpx::execution::unsequenced_task_policy>
+      : std::true_type
+    {
+    };
+
+    template <typename Executor, typename Parameters>
+    struct is_async_execution_policy<
+        hpx::execution::unsequenced_task_policy_shim<Executor, Parameters>>
+      : std::true_type
+    {
+    };
+    
+    template <>
+    struct is_async_execution_policy<hpx::execution::parallel_unsequenced_task_policy>
+      : std::true_type
+    {
+    };
+
+    template <typename Executor, typename Parameters>
+    struct is_async_execution_policy<
+        hpx::execution::parallel_unsequenced_task_policy_shim<Executor, Parameters>>
       : std::true_type
     {
     };
