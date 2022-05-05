@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <hpx/executors/execution_policy.hpp>
 
 #include "foreach_tests.hpp"
 
@@ -23,9 +24,13 @@ void test_for_each()
     test_for_each(seq, IteratorTag());
     test_for_each(par, IteratorTag());
     test_for_each(par_unseq, IteratorTag());
+    test_for_each(unseq, IteratorTag());
+    
 
     test_for_each_async(seq(task), IteratorTag());
     test_for_each_async(par(task), IteratorTag());
+    test_for_each_async(unseq(task), IteratorTag());
+    test_for_each_async(par_unseq(task), IteratorTag());
 }
 
 void for_each_test()
