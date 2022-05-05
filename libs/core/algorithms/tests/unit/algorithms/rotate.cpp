@@ -9,6 +9,7 @@
 #include <hpx/local/init.hpp>
 #include <hpx/modules/testing.hpp>
 #include <hpx/parallel/algorithms/rotate.hpp>
+#include <hpx/executors/execution_policy.hpp>
 
 #include <cstddef>
 #include <iostream>
@@ -132,9 +133,12 @@ void test_rotate()
     test_rotate(seq, IteratorTag());
     test_rotate(par, IteratorTag());
     test_rotate(par_unseq, IteratorTag());
+    test_rotate(unseq, IteratorTag());   
 
     test_rotate_async(seq(task), IteratorTag());
     test_rotate_async(par(task), IteratorTag());
+    test_rotate_async(par_unseq(task), IteratorTag());
+    test_rotate_async(unseq(task),IteratorTag());
 }
 
 void rotate_test()
